@@ -122,6 +122,13 @@ public final class TemplateParser {
                 extract(templateCode, lastIndex, i, (depth, content) -> visitor.onImport(content.trim()));
                 pop();
                 lastIndex = i + 1;
+            } else if (!currentMode.isComment() && regionMatches("@templateimport") && isParamOrImportAllowed()) {
+                push(Mode.TemplateImport);
+                lastIndex = i + 1;
+            } else if (currentMode == Mode.TemplateImport && currentChar == '\n') {
+                extract(templateCode, lastIndex, i, (depth, content) -> visitor.onTemplateImport(content.trim()));
+                pop();
+                lastIndex = i + 1;
             } else if (!currentMode.isComment() && regionMatches("@param") && isParamOrImportAllowed()) {
                 push(Mode.Param);
                 lastIndex = i + 1;
@@ -981,6 +988,7 @@ public final class TemplateParser {
     interface Mode {
         Mode Import = new StatelessMode("Import");
         Mode Param = new StatelessMode("Param");
+        Mode TemplateImport = new StatelessMode("Using");
         Mode Text = new StatelessMode("Text");
         Mode Code = new StatelessMode("Code", true, true, false);
         Mode UnsafeCode = new StatelessMode("UnsafeCode", true, true, false);

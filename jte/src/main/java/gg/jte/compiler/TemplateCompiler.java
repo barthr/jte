@@ -267,6 +267,16 @@ public class TemplateCompiler extends TemplateLoader {
         }
     }
 
+    public boolean templateExists(String simpleName, String extension) {
+        String name = resolveTemplateName(simpleName, extension);
+        if (codeResolver.exists(name)) {
+            return true;
+        }
+
+        // TODO check alternative name
+        return false;
+    }
+
     private String resolveTemplateName(String simpleName, String extension) {
         return simpleName.replace('.', '/') + "." + extension;
     }

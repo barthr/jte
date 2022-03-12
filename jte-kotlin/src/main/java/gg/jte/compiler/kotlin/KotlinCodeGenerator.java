@@ -47,6 +47,11 @@ public class KotlinCodeGenerator implements CodeGenerator {
         kotlinCode.append("import ").append(importClass).append("\n");
     }
 
+    @Override
+    public void onTemplateImport(String template) {
+        // TODO implement for Kotlin
+    }
+
     private void writePackageIfRequired() {
         if (!hasWrittenPackage) {
             kotlinCode.append("package " + classInfo.packageName + "\n");

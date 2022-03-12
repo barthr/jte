@@ -580,6 +580,40 @@ public class TemplateEngineTest {
     }
 
     @Test
+    void templateImport() {
+        givenTemplate("foo/bar.jte", "foobar");
+        givenRawTemplate("@templateimport foo.bar\n" +
+                "@template.bar()");
+        thenOutputIs("foobar");
+    }
+
+    @Test
+    void templateImport_useless() {
+        givenTemplate("foo.jte", "foobar");
+        givenRawTemplate("@templateimport foo\n" +
+                "@template.foo()");
+        thenOutputIs("foobar");
+    }
+
+    @Test
+    void templateImport_doesNotExist() {
+        givenRawTemplate("@templateimport foo.bar\n");
+        thenRenderingFailsWithException().hasMessage("Failed to compile test/template.jte, error at line 1: Template foo.bar does not exist.");
+    }
+
+    @Test
+    void templateImport_comment() {
+        givenRawTemplate("<%--@templateimport foo.bar--%>");
+        thenOutputIs("");
+    }
+
+    @Test
+    void templateImport_afterParams() {
+        givenRawTemplate("This is @templateimport foo\n");
+        thenOutputIs("This is @templateimport foo\n");
+    }
+
+    @Test
     void comment() {
         givenTemplate("<%--This is a comment" +
                 " ${model.hello} everything in here is omitted--%>" +

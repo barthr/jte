@@ -10,9 +10,7 @@ import gg.jte.runtime.DebugInfo;
 import gg.jte.compiler.TemplateType;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static gg.jte.runtime.Constants.TEXT_PART_BINARY;
@@ -27,6 +25,7 @@ public class JavaCodeGenerator implements CodeGenerator {
     private final LinkedHashSet<TemplateDependency> templateDependencies;
     private final List<ParamInfo> parameters = new ArrayList<>();
     private final List<byte[]> binaryTextParts = new ArrayList<>();
+    private final Map<String, String> templateImports = new HashMap<>();
 
     private boolean hasWrittenPackage;
     private boolean hasWrittenClass;
@@ -44,6 +43,18 @@ public class JavaCodeGenerator implements CodeGenerator {
     public void onImport(String importClass) {
         writePackageIfRequired();
         javaCode.append("import ").append(importClass).append(";\n");
+    }
+
+    @Override
+    public void onTemplateImport(String template) {
+        if (compiler.templateExists(template, "jte")) {
+            String simpleName = CodeGenerator.resolveSimpleName(template);
+            if (simpleName != null) {
+                templateImports.put(simpleName, template);
+            }
+        } else {
+            onError("Template " + template + " does not exist.");
+        }
     }
 
     private void writePackageIfRequired() {
@@ -381,6 +392,8 @@ public class JavaCodeGenerator implements CodeGenerator {
 
     @Override
     public void onTemplateCall(int depth, String name, List<String> params) {
+        name = templateImports.getOrDefault(name, name);
+
         ClassInfo tagInfo = compiler.generateTemplateCall(name, "jte", classDefinitions, templateDependencies, getCurrentDebugInfo());
 
         writeIndentation(depth);

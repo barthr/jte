@@ -10,6 +10,11 @@ class TemplateParametersCompleteVisitor implements TemplateParserVisitor {
     }
 
     @Override
+    public void onTemplateImport(String template) {
+        throw new Result(false);
+    }
+
+    @Override
     public void onParam(String parameter) {
         throw new Result(false);
     }

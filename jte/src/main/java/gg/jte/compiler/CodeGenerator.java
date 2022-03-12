@@ -50,4 +50,13 @@ public interface CodeGenerator extends TemplateParserVisitor {
 
         return value.substring(startIndex + 2, endIndex);
     }
+
+    static String resolveSimpleName(String templateName) {
+        int index = templateName.lastIndexOf('.');
+        if (index == -1) {
+            return null;
+        }
+
+        return templateName.substring(index + 1);
+    }
 }
