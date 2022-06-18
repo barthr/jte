@@ -390,6 +390,12 @@ public class JavaCodeGenerator implements CodeGenerator {
     }
 
     @Override
+    public void onInsert(int depth, String path) {
+        String pathContent = compiler.resolveCode(path, getCurrentDebugInfo());
+        onTextPart(depth, pathContent + "\n");
+    }
+
+    @Override
     public void onInterceptHtmlTagOpened(int depth, TemplateParser.HtmlTag htmlTag) {
         writeIndentation(depth);
         javaCode.append("jteHtmlInterceptor.onHtmlTagOpened(\"").append(htmlTag.name).append("\", ");

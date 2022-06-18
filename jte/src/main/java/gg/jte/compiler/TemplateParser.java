@@ -341,6 +341,14 @@ public final class TemplateParser {
                 } else if (currentChar != ' ') {
                     getPreviousMode(TemplateCallMode.class).name.append(currentChar);
                 }
+            } else if (currentMode == Mode.Text && regionMatches("@insert")) {
+                extractTextPart(i - 6, Mode.Insert);
+                lastIndex = i + 1;
+                push(Mode.Insert);
+            } else if (currentMode == Mode.Insert && currentChar == '\n') {
+                extract(templateCode, lastIndex, i, (depth, content) -> visitor.onInsert(depth, content.trim()));
+                pop();
+                lastIndex = i + 1;
             } else if (currentMode == Mode.Text && contentType == ContentType.Html) {
                 interceptHtmlTags();
             }
@@ -981,6 +989,7 @@ public final class TemplateParser {
         Mode Content = new StatelessMode("Content", false, false, true);
         Mode Raw = new StatelessMode("Raw");
         Mode RawEnd = new StatelessMode("RawEnd");
+        Mode Insert = new StatelessMode("Insert");
 
         boolean isTrackStrings();
         boolean isTrackBraces();

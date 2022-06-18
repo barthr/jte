@@ -85,6 +85,11 @@ class TemplateParametersCompleteVisitor implements TemplateParserVisitor {
     }
 
     @Override
+    public void onInsert(int depth, String path) {
+
+    }
+
+    @Override
     public void onLineFinished() {
 
     }

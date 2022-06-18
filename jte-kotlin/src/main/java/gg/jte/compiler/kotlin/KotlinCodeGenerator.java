@@ -397,6 +397,11 @@ public class KotlinCodeGenerator implements CodeGenerator {
     }
 
     @Override
+    public void onInsert(int depth, String path) {
+        // TODO kte support
+    }
+
+    @Override
     public void onInterceptHtmlTagOpened(int depth, TemplateParser.HtmlTag htmlTag) {
         writeIndentation(depth);
         kotlinCode.append("jteHtmlInterceptor?.onHtmlTagOpened(\"").append(htmlTag.name).append("\", ");

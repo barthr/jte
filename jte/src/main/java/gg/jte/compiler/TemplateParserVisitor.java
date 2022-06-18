@@ -39,6 +39,8 @@ public interface TemplateParserVisitor {
 
     void onTemplateCall(int depth, String name, List<String> params);
 
+    void onInsert(int depth, String path);
+
     void onLineFinished();
 
     void onComplete();

@@ -100,6 +100,11 @@ class TemplateSingleControlStructureVisitor implements TemplateParserVisitor {
     }
 
     @Override
+    public void onInsert(int depth, String path) {
+        throw new NotSingleControlStructure();
+    }
+
+    @Override
     public void onLineFinished() {
         // not relevant
     }

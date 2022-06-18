@@ -580,6 +580,16 @@ public class TemplateEngineTest {
     }
 
     @Test
+    void insert() {
+        String template = "@param java.lang.String firstParam\n" +
+                "@param int secondParam\n" +
+                "One: ${firstParam}, two: ${secondParam}";
+        givenTemplate("card.jte", template);
+        givenTemplate("@insert card.jte\nThat was an inserted template!");
+        thenOutputIs(template + "\nThat was an inserted template!");
+    }
+
+    @Test
     void comment() {
         givenTemplate("<%--This is a comment" +
                 " ${model.hello} everything in here is omitted--%>" +

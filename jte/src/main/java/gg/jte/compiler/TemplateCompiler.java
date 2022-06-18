@@ -321,7 +321,7 @@ public class TemplateCompiler extends TemplateLoader {
         }
     }
 
-    private String resolveCode(String name, DebugInfo debugInfo) {
+    public String resolveCode(String name, DebugInfo debugInfo) {
         String code = codeResolver.resolve(name);
         if (code == null) {
             String message = name + " not found";
